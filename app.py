@@ -1,6 +1,5 @@
 import mysql.connector
-from mysql.connector import errorcode
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 from fonctions import creer_groupe
 
 db = mysql.connector.connect(
@@ -29,6 +28,23 @@ def creer():
     db.commit()
 
     return f"Groupe crée ! Voici l'UID secret : {nouvel_uid} (A CONSERVER PRECIEUSEMENT ! COMME SI VOTRE VIE EN DEPENDAIT !!!!)"
+
+@app.route("/rejoindre", methods=["POST"])
+def rejoindre():
+    uid_demande = request.form.get("uid_saisi")
+    requete = "SELECT * FROM groupes WHERE uid_secret = %s"
+
+    cursor.execute(requete, (uid_demande,))
+    groupe_trouve = cursor.fetchone()
+
+    if groupe_trouve:
+        return redirect(url_for('discussions', uid_groupe = uid_demande))
+    else:
+        return "Cet UID est erroné ou inéxistant"
+    
+@app.route("/discussions/<uid_groupe>")
+def discussions(uid_groupe):
+    return f"Bienvenue chez : {uid_groupe}"
 
 if __name__ == "__main__":
     app.run()
