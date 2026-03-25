@@ -1,6 +1,10 @@
+import os
 import mysql.connector
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from fonctions import creer_groupe
+from dotenv import load_dotenv
+
+load_dotenv()
 
 db = mysql.connector.connect(
     host="localhost",
@@ -29,6 +33,8 @@ def creer():
 
     return f"Groupe crée ! Voici l'UID secret : {nouvel_uid} (A CONSERVER PRECIEUSEMENT ! COMME SI VOTRE VIE EN DEPENDAIT !!!!)"
 
+app.secret_key = os.getenv("CLE_FLASK")
+
 @app.route("/rejoindre", methods=["POST"])
 def rejoindre():
     uid_demande = request.form.get("uid_saisi")
@@ -38,13 +44,18 @@ def rejoindre():
     groupe_trouve = cursor.fetchone()
 
     if groupe_trouve:
-        return redirect(url_for('discussions', uid_groupe = uid_demande))
+        session["uid_actif"] = uid_demande
+        return redirect(url_for("discussions"))
     else:
         return "Cet UID est erroné ou inéxistant"
     
-@app.route("/discussions/<uid_groupe>")
-def discussions(uid_groupe):
-    return f"Bienvenue chez : {uid_groupe}"
+@app.route("/discussions")
+def discussions():
+    if "uid_actif" not in session:
+        return redirect(url_for("accueil"))
+    
+    uid_groupe = session["uid_actif"]
+    return render_template("discussions.html", uid = uid_groupe)
 
 if __name__ == "__main__":
     app.run()
