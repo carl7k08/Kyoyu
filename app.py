@@ -16,6 +16,7 @@ db = mysql.connector.connect(
 cursor = db.cursor()
 
 app = Flask(__name__)
+app.secret_key = os.getenv("CLE_FLASK")
 
 @app.route("/")
 def accueil():
@@ -32,8 +33,6 @@ def creer():
     db.commit()
 
     return f"Groupe crée ! Voici l'UID secret : {nouvel_uid} (A CONSERVER PRECIEUSEMENT ! COMME SI VOTRE VIE EN DEPENDAIT !!!!)"
-
-app.secret_key = os.getenv("CLE_FLASK")
 
 @app.route("/rejoindre", methods=["POST"])
 def rejoindre():

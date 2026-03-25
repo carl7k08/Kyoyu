@@ -3,15 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Discussion</title>
 </head>
 <body>
-    <h1>Chat</h1>
-    <div id="messages"></div>
-
-    <input type="text" id="input">
-    <button id="btn">Envoyer</button>
-
-    <script src="script.js"></script>
+    <h1>Discussion du groupe :{{uid_groupe}}</h1>
+    <div id="messages">
+        {% for message in messages %}
+            <p><strong>Anonymous blud :</strong>{{ message }}</p>
+        {% else %}
+            <p>Il y a welou ! Reviens plsus tard ou soit le premier à écrire</p>
+    </div>
+    <br>
+    <form action="/envoyer_message" method="POST">
+        <input type="hidden" name="uid_groupe" value="{{ uid_groupe }}">
+        <input type="text" name="message" placeholder="Votre message..." required>
+        <button type="submit">Envoyer</button>
+    </form>
 </body>
 </html>
