@@ -6,7 +6,8 @@
     <title>Document</title>
 </head>
 <body>
-    <img src="images/hi.png"/>
+    <img src="{{ url_for('static', filename='images/hi.png') }}" alt="Hi, Guys !">
+
     <form action="/creer" method="POST">
         <button type="submit">Créer un groupe anonyme</button>
     </form>
