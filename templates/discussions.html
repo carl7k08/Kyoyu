@@ -6,16 +6,19 @@
     <title>Discussion</title>
 </head>
 <body>
-    <h1>Discussion du groupe :{{uid_groupe}}</h1>
+    <h1>Discussion du groupe :{{ uid }}</h1>
     <div id="messages">
-        {% for message in messages %}
+        {% for message in liste_messages %}
             <p><strong>Anonymous blud :</strong>{{ message }}</p>
         {% else %}
             <p>Il y a welou ! Reviens plsus tard ou soit le premier à écrire</p>
+        {% endfor %}
     </div>
+
     <br>
-    <form action="/envoyer_message" method="POST">
-        <input type="hidden" name="uid_groupe" value="{{ uid_groupe }}">
+    
+    <form action="/envoyer" method="POST">
+        <input type="hidden" name="uid_groupe" value="{{ uid }}">
         <input type="text" name="message" placeholder="Votre message..." required>
         <button type="submit">Envoyer</button>
     </form>

@@ -10,7 +10,7 @@ def chiffrer_message(message, cle):
     message_encode = message.encode()
     f = Fernet(cle)
     message_chiffre = f.encrypt(message_encode)
-    return message_chiffre
+    return message_chiffre.decode()
 
 def dechiffrer_message(message_chiffre, cle):
     f = Fernet(cle)
